@@ -2,6 +2,7 @@ import logging
 import json
 from hashlib import sha256
 
+
 def check_for_db():
     try:
         with open("data.json", "r") as db:
@@ -13,10 +14,11 @@ def check_for_db():
             data = {}
             db.write(json.dumps(data))
 
+
 def fetch_message(msg_sha):
     check_for_db()
     with open("data.json", "r") as db:
-            data = json.load(db)
+        data = json.load(db)
     try:
         logging.info(f"looking for {msg_sha}")
         response = {"message": data[msg_sha]}
@@ -43,7 +45,7 @@ def write_message(msg):
     # https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5
     status = 201
 
-    return { "response": response, "status": status }
+    return {"response": response, "status": status}
 
 
 def delete_message(msg_sha):
@@ -64,5 +66,4 @@ def delete_message(msg_sha):
         response = ""
         status = 204
 
-    return { "response": response, "status": status }
-
+    return {"response": response, "status": status}

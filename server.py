@@ -24,6 +24,10 @@ class Server(BaseHTTPRequestHandler):
             message = f"not found, yo. path was {self.path} and route was {route}"
             status = 404
 
+        request_blob = {}
+        request_blob["route"] = route
+        request_blob["status"] = status
+
         self.respond(status, message)
 
     def do_POST(self):
@@ -59,7 +63,6 @@ class Server(BaseHTTPRequestHandler):
             status = 404
 
         self.respond(status, message)
-
 
     def do_PUT(self):
         message = "Not Allowed"
