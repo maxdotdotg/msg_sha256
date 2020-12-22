@@ -2,21 +2,20 @@ import logging
 import json
 from hashlib import sha256
 
-
-def fetch_message(msg_sha):
+def check_for_db():
     try:
-        print("looking for db")
         with open("data.json", "r") as db:
             data = json.load(db)
     except (FileNotFoundError, json.decoder.JSONDecodeError):
-        print("nodb")
+        print("no db file found, creating empty db")
         logging.info("initialize empty db")
-        with open("data.json", "w") as initial_db:
-            initial_db.write("{}")
+        with open("data.json", "w") as db:
+            data = {}
+            db.write(json.dumps(data))
 
-        with open("data.json", "r") as db:
+def fetch_message(msg_sha):
+    with open("data.json", "r") as db:
             data = json.load(db)
-
     try:
         logging.info(f"looking for {msg_sha}")
         response = {"message": data[msg_sha]}
@@ -24,16 +23,18 @@ def fetch_message(msg_sha):
     except KeyError:
         response = {"error": "unable to find message", "message_sha256": msg_sha}
         status = 404
+
     return {"response": response, "status": status}
 
 
 def write_message(msg):
     msg_sha = sha256(msg.encode("utf-8").strip()).hexdigest()
 
-    with open("data.json", "w+") as db:
-        data = json.load(db)
-        data[msg_sha] = msg
-        json.dump(data, db)
+    infile = json.load(open("data.json", "r"))
+    outfile = open("data.json", "w+")
+
+    infile[msg_sha] = msg
+    json.dump(infile, outfile)
     response = {"digest": msg_sha}
     status = 201
 
