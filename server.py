@@ -2,7 +2,6 @@ from http.server import BaseHTTPRequestHandler
 from messages import fetch_message, write_message, delete_message
 from metrics import get_metrics
 import logging
-from ast import literal_eval
 
 
 class Server(BaseHTTPRequestHandler):
@@ -61,10 +60,22 @@ class Server(BaseHTTPRequestHandler):
         self.respond(status, message)
 
 
+    def do_PUT(self):
+        message = "Not Allowed"
+        status = 405
+        self.respond(status, message)
+
+    def do_HEAD(self):
+        message = "Not Allowed"
+        status = 405
+        self.respond(status, message)
+
     def handle_http(self, status, message, content_type):
         self.send_response(status)
         self.send_header("Content-type", content_type)
         self.end_headers()
+
+        # incremenmt request qty?
         return bytes(str(message), "UTF-8")
 
     def respond(self, status, message):
