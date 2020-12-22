@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler
 from messages import fetch_message, write_message, delete_message
 import logging
+from ast import literal_eval
 
 
 class Server(BaseHTTPRequestHandler):
@@ -30,17 +31,22 @@ class Server(BaseHTTPRequestHandler):
         if route == "messages":
             try:
                 length = int(self.headers["Content-Length"])
-                content = str(self.rfile.read(length)).strip("b'")
-                print(f"message body exists: {content}")
-                message = content
-                status = 9001
-            except TypeError:
-                print("caught type error")
+                content = literal_eval(self.rfile.read(length).decode("UTF-8"))
+
+                print("calling write_message with", content["message"])
+                query = write_message(content["message"])
+                message = query["response"]
+                status = query["status"]
+            except TypeError as e:
+                print("caught type error:", e)
                 message = "body must be in the form of { 'message': 'hello there' }"
                 status = 405
         else:
             message = f"not found, yo. path was {self.path} and route was {route}"
             status = 404
+
+        self.respond(status, message)
+
 
     def handle_http(self, status, message, content_type):
         self.send_response(status)

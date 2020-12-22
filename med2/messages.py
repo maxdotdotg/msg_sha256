@@ -5,20 +5,21 @@ from hashlib import sha256
 
 def fetch_message(msg_sha):
     try:
-        with open("data.json", "rb") as db:
+        print("looking for db")
+        with open("data.json", "r") as db:
             data = json.load(db)
-    except FileNotFoundError:
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
         print("nodb")
         logging.info("initialize empty db")
         with open("data.json", "w") as initial_db:
             initial_db.write("{}")
 
-        with open("data.json", "rb") as db:
+        with open("data.json", "r") as db:
             data = json.load(db)
 
     try:
         logging.info(f"looking for {msg_sha}")
-        response = {"digest": data[msg_sha]}
+        response = {"message": data[msg_sha]}
         status = 200
     except KeyError:
         response = {"error": "unable to find message", "message_sha256": msg_sha}
@@ -27,21 +28,16 @@ def fetch_message(msg_sha):
 
 
 def write_message(msg):
-    with open("data.json", "wb+") as db:
-        data = json.load(db)
+    msg_sha = sha256(msg.encode("utf-8").strip()).hexdigest()
 
-    # check if msg already exists
-    # if not, write it
-    msg_sha = sha256(msg.strip().hexdigest())
-    if "error" in fetch_message(msg_sha).values():
+    with open("data.json", "w+") as db:
+        data = json.load(db)
         data[msg_sha] = msg
-        response = {"digest": msg_sha}
-        status = 201
-        return response
-    else:
-        response = {"digest": msg_sha}
-        status = 200
-        return response
+        json.dump(data, db)
+    response = {"digest": msg_sha}
+    status = 201
+
+    return { "response": response, "status": status }
 
 
 def delete_message(msg_sha):
