@@ -47,6 +47,18 @@ class Server(BaseHTTPRequestHandler):
 
         self.respond(status, message)
 
+    def do_DELETE(self):
+        route = self.path.split("/")[1].strip("/")
+        if route == "messages":
+            query = delete_message(self.path.split("/")[2])
+            message = query["response"]
+            status = query["status"]
+        else:
+            message = f"not found, yo. path was {self.path} and route was {route}"
+            status = 404
+
+        self.respond(status, message)
+
 
     def handle_http(self, status, message, content_type):
         self.send_response(status)

@@ -14,6 +14,7 @@ def check_for_db():
             db.write(json.dumps(data))
 
 def fetch_message(msg_sha):
+    check_for_db()
     with open("data.json", "r") as db:
             data = json.load(db)
     try:
@@ -28,6 +29,7 @@ def fetch_message(msg_sha):
 
 
 def write_message(msg):
+    check_for_db()
     msg_sha = sha256(msg.encode("utf-8").strip()).hexdigest()
 
     infile = json.load(open("data.json", "r"))
@@ -42,16 +44,17 @@ def write_message(msg):
 
 
 def delete_message(msg_sha):
-    with open("data.json", "wb") as db:
-        data = json.load(db)
+    infile = json.load(open("data.json", "r"))
+    outfile = open("data.json", "w+")
 
-    if "digest" in fetch_message(msg_sha).values():
-        del data[msg_sha]
-        json.dump(data, db)
-        response = {"response": ""}
+    try:
+        del infile[msg_sha]
+        json.dump(infile, outfile)
+        response = ""
         status = 200
-    else:
-        response = {"response": ""}
-        status = 404
+    except KeyError:
+        response = ""
+        status = 200
 
-    return response
+    return { "response": response, "status": status }
+
