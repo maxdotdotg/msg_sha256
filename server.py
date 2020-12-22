@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 from messages import fetch_message, write_message, delete_message
+from metrics import get_metrics
 import logging
 from ast import literal_eval
 
