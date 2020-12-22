@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler
 from messages import fetch_message, write_message, delete_message
 from metrics import get_metrics
 import logging
+from ast import literal_eval
 
 
 class Server(BaseHTTPRequestHandler):
@@ -14,7 +15,7 @@ class Server(BaseHTTPRequestHandler):
             status = query["status"]
         elif route == "metrics":
             logging.info("hit metrics")
-            message = "hit /metrics"
+            message = get_metrics()
             status = 200
         elif route == "":
             message = "hit the root"
