@@ -38,6 +38,9 @@ def write_message(msg):
     infile[msg_sha] = msg
     json.dump(infile, outfile)
     response = {"digest": msg_sha}
+
+    # return 201 on successful create
+    # https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5
     status = 201
 
     return { "response": response, "status": status }
@@ -51,10 +54,15 @@ def delete_message(msg_sha):
         del infile[msg_sha]
         json.dump(infile, outfile)
         response = ""
-        status = 200
+
+        # return 204 on successful delete
+        # https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7
+        status = 204
     except KeyError:
+        # even if key wasn't found, treat delete as success since the record
+        # is not in the db
         response = ""
-        status = 200
+        status = 204
 
     return { "response": response, "status": status }
 
