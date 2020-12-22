@@ -7,4 +7,9 @@ A small HTTP service that implements a RESTful API that stores a message and ret
 - GET to `/metrics`: qty of records, time of last write(?)
 
 
+## Usage
+to run the server, execute `main.py`
+``` bash
+./main.py
+```
 
