@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 from ast import literal_eval
+from json import dumps
 
 from messages import fetch_message, write_message, delete_message
 from metrics import get_metrics, record_request
@@ -72,7 +73,7 @@ class Server(BaseHTTPRequestHandler):
         self.end_headers()
 
         record_request(self.path)
-        return bytes(str(message), "UTF-8")
+        return bytes(str(dumps(message)), "UTF-8")
 
     def respond(self, status, message):
         content = self.handle_http(status, message, "application/json")
