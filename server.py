@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler
 from ast import literal_eval
 
 from messages import fetch_message, write_message, delete_message
-from metrics import get_metrics
+from metrics import get_metrics, record_request
 
 class Server(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -22,10 +22,6 @@ class Server(BaseHTTPRequestHandler):
         else:
             message = "Not Found"
             status = 404
-
-        request_blob = {}
-        request_blob["route"] = route
-        request_blob["status"] = status
 
         self.respond(status, message)
 
@@ -75,7 +71,7 @@ class Server(BaseHTTPRequestHandler):
         self.send_header("Content-type", content_type)
         self.end_headers()
 
-        # incremenmt request qty?
+        record_request(self.path)
         return bytes(str(message), "UTF-8")
 
     def respond(self, status, message):
