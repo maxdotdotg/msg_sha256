@@ -8,9 +8,14 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         route = self.path.split("/")[1].strip("/")
         if route == "messages":
-            query = fetch_message(self.path.split("/")[2])
-            message = query["response"]
-            status = query["status"]
+            sha = self.path.split("/")[2]
+            if sha != "":
+                query = fetch_message(sha)
+                message = query["response"]
+                status = query["status"]
+            else:
+                message = "Not Found"
+                status = 404
         elif route == "metrics":
             message = get_metrics()
             status = 200
