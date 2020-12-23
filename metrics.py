@@ -19,13 +19,6 @@ def get_count_items():
     return records
 
 
-def get_last_request():
-    # get method
-    # get body
-    # get status
-    pass
-
-
 def get_db_size():
     db_size = {}
 
