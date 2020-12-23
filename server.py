@@ -5,6 +5,7 @@ from json import dumps
 from messages import fetch_message, write_message, delete_message
 from metrics import get_metrics, record_request
 
+
 class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         route = self.path.split("/")[1].strip("/")

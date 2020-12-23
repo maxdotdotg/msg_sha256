@@ -3,6 +3,7 @@ from collections import Counter
 
 path_counter = Counter()
 
+
 def get_count_items():
     records = {}
     try:
@@ -47,8 +48,7 @@ def get_metrics():
 
     records = get_count_items()
     size = get_db_size()
-    top_requests = { record[0] : record[1] for record in\
-            path_counter.most_common(10) }
+    top_requests = {record[0]: record[1] for record in path_counter.most_common(10)}
 
     metrics_blob["top_requests"] = top_requests
     metrics_blob.update(records)
@@ -56,6 +56,6 @@ def get_metrics():
 
     return metrics_blob
 
+
 def record_request(path):
     path_counter.update([path])
-
