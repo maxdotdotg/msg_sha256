@@ -15,9 +15,6 @@ COPY --chown=prod:prod messages.py /home/prod
 COPY --chown=prod:prod metrics.py /home/prod
 COPY --chown=prod:prod server.py /home/prod
 
-# make main executable, permissions don't persist :expressionless:
-RUN chmod u+x /home/prod/main
-
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
