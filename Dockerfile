@@ -22,4 +22,4 @@ RUN chmod u+x /home/prod/main
 EXPOSE 8000
 
 # Run when the container launches
-CMD ./main
+CMD ["./main"]
