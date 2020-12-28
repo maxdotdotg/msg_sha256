@@ -9,9 +9,9 @@ This service implements a RESTful API that stores a message and returns the SHA2
 
 
 ## Usage
-to run the server via the CLI, execute `main.py`
+to run the server via the CLI, execute `main`
 ``` bash
-./main.py
+./main
 ```
 
 Alternatively, use docker:
