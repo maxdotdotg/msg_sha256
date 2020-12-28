@@ -1,5 +1,5 @@
 # Description
-A small HTTP service written using the Python standard library.
+A small HTTP service written using the Python 3 standard library.
 
 This service implements a RESTful API that stores a message and returns the SHA256 hash of that message to the user.
 - POST to `/messages`: stores the message and returns the SHA256 hash of that message
